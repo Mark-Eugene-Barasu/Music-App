@@ -8,7 +8,7 @@ import TrackItem from '../components/TrackItem';
 import MiniPlayer from '../components/MiniPlayer';
 
 export default function HomeScreen({ navigation }) {
-  const { tracks, loading, loadingCount, permissionStatus } = useMediaLibrary();
+  const { tracks, loading, loadingCount, permissionStatus, error, reload } = useMediaLibrary();
   const { loadAndPlay, currentTrack } = usePlayer();
 
   if (loading) {
@@ -18,6 +18,19 @@ export default function HomeScreen({ navigation }) {
         <Text style={styles.loadingText}>
           {loadingCount > 0 ? `Found ${loadingCount} songs...` : 'Loading your music...'}
         </Text>
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={styles.center}>
+        <Ionicons name="alert-circle" size={48} color="#e74c3c" />
+        <Text style={styles.permText}>Failed to load music</Text>
+        <Text style={styles.permSub}>{error}</Text>
+        <TouchableOpacity onPress={reload} style={styles.retryBtn}>
+          <Text style={styles.retryText}>Retry</Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -80,4 +93,6 @@ const styles = StyleSheet.create({
   loadingText: { color: '#888', marginTop: 12, fontSize: 15 },
   permText: { color: '#fff', fontSize: 18, fontWeight: '600' },
   permSub: { color: '#666', fontSize: 14 },
+  retryBtn: { marginTop: 16, backgroundColor: '#1DB954', paddingHorizontal: 32, paddingVertical: 12, borderRadius: 24 },
+  retryText: { color: '#fff', fontWeight: '700', fontSize: 15 },
 });
