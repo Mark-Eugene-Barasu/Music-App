@@ -7,11 +7,17 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
 
+import { StatsProvider } from './src/context/StatsContext';
 import { PlayerProvider } from './src/context/PlayerContext';
+import { PlaylistProvider } from './src/context/PlaylistContext';
+
 import HomeScreen from './src/screens/HomeScreen';
 import SearchScreen from './src/screens/SearchScreen';
 import LibraryScreen from './src/screens/LibraryScreen';
 import PlayerScreen from './src/screens/PlayerScreen';
+import QueueScreen from './src/screens/QueueScreen';
+import WrappedScreen from './src/screens/WrappedScreen';
+import PlaylistScreen from './src/screens/PlaylistScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -40,19 +46,22 @@ function Tabs() {
 export default function App() {
   return (
     <SafeAreaProvider>
-      <PlayerProvider>
-        <NavigationContainer>
-          <StatusBar style="light" />
-          <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="Tabs" component={Tabs} />
-            <Stack.Screen
-              name="Player"
-              component={PlayerScreen}
-              options={{ presentation: 'modal', animation: 'slide_from_bottom' }}
-            />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </PlayerProvider>
+      <StatsProvider>
+        <PlaylistProvider>
+          <PlayerProvider>
+            <NavigationContainer>
+              <StatusBar style="light" />
+              <Stack.Navigator screenOptions={{ headerShown: false }}>
+                <Stack.Screen name="Tabs" component={Tabs} />
+                <Stack.Screen name="Player" component={PlayerScreen} options={{ presentation: 'modal', animation: 'slide_from_bottom' }} />
+                <Stack.Screen name="Queue" component={QueueScreen} />
+                <Stack.Screen name="Wrapped" component={WrappedScreen} />
+                <Stack.Screen name="Playlist" component={PlaylistScreen} />
+              </Stack.Navigator>
+            </NavigationContainer>
+          </PlayerProvider>
+        </PlaylistProvider>
+      </StatsProvider>
     </SafeAreaProvider>
   );
 }

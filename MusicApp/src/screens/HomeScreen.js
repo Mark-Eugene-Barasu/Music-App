@@ -1,15 +1,26 @@
 import React from 'react';
-import { View, Text, FlatList, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, StyleSheet, ActivityIndicator, TouchableOpacity, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useMediaLibrary } from '../hooks/useMediaLibrary';
 import { usePlayer } from '../context/PlayerContext';
+import { usePlaylists } from '../context/PlaylistContext';
 import TrackItem from '../components/TrackItem';
 import MiniPlayer from '../components/MiniPlayer';
 
 export default function HomeScreen({ navigation }) {
   const { tracks, loading, loadingCount, permissionStatus, error, reload } = useMediaLibrary();
-  const { loadAndPlay, currentTrack } = usePlayer();
+  const { loadAndPlay, currentTrack, addToQueue, playNext } = usePlayer();
+  const { playlists, addTrackToPlaylist } = usePlaylists();
+
+  function handleLongPress(track) {
+    Alert.alert(track.title, null, [
+      { text: 'Play Next', onPress: () => playNext(track) },
+      { text: 'Add to Queue', onPress: () => addToQueue(track) },
+      ...playlists.map(p => ({ text: `Add to "${p.name}"`, onPress: () => addTrackToPlaylist(p.id, track.id) })),
+      { text: 'Cancel', style: 'cancel' },
+    ]);
+  }
 
   if (loading) {
     return (
@@ -58,7 +69,7 @@ export default function HomeScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>BeatWave</Text>
+        <Text style={styles.headerTitle}>SamPlayer</Text>
         <TouchableOpacity onPress={() => navigation.navigate('Search')}>
           <Ionicons name="search" size={24} color="#fff" />
         </TouchableOpacity>
@@ -72,6 +83,7 @@ export default function HomeScreen({ navigation }) {
             track={item}
             isActive={currentTrack?.id === item.id}
             onPress={() => { loadAndPlay(item, tracks, index); navigation.navigate('Player'); }}
+            onLongPress={() => handleLongPress(item)}
           />
         )}
         ListHeaderComponent={

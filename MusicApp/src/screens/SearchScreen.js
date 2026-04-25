@@ -1,24 +1,31 @@
 import React, { useState, useMemo } from 'react';
-import { View, Text, TextInput, FlatList, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, TextInput, FlatList, StyleSheet, ActivityIndicator, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useMediaLibrary } from '../hooks/useMediaLibrary';
 import { usePlayer } from '../context/PlayerContext';
+import { usePlaylists } from '../context/PlaylistContext';
+import { buildFuse, fuzzySearch } from '../utils/fuzzy';
 import TrackItem from '../components/TrackItem';
 import MiniPlayer from '../components/MiniPlayer';
 
 export default function SearchScreen({ navigation }) {
   const [query, setQuery] = useState('');
   const { tracks, loading } = useMediaLibrary();
-  const { loadAndPlay, currentTrack } = usePlayer();
+  const { loadAndPlay, currentTrack, addToQueue, playNext } = usePlayer();
+  const { playlists, addTrackToPlaylist } = usePlaylists();
 
-  const results = useMemo(() => {
-    if (!query.trim()) return [];
-    const q = query.toLowerCase();
-    return tracks.filter(t =>
-      t.title.toLowerCase().includes(q) || t.artist.toLowerCase().includes(q)
-    );
-  }, [query, tracks]);
+  const fuse = useMemo(() => buildFuse(tracks), [tracks]);
+  const results = useMemo(() => fuzzySearch(fuse, query), [fuse, query]);
+
+  function handleLongPress(track) {
+    Alert.alert(track.title, null, [
+      { text: 'Play Next', onPress: () => playNext(track) },
+      { text: 'Add to Queue', onPress: () => addToQueue(track) },
+      ...playlists.map(p => ({ text: `Add to "${p.name}"`, onPress: () => addTrackToPlaylist(p.id, track.id) })),
+      { text: 'Cancel', style: 'cancel' },
+    ]);
+  }
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
@@ -27,7 +34,7 @@ export default function SearchScreen({ navigation }) {
         <Ionicons name="search" size={18} color="#666" style={styles.icon} />
         <TextInput
           style={styles.input}
-          placeholder="Songs, artists..."
+          placeholder="Songs, artists, filenames..."
           placeholderTextColor="#555"
           value={query}
           onChangeText={setQuery}
@@ -44,6 +51,7 @@ export default function SearchScreen({ navigation }) {
         <View style={styles.hint}>
           <Ionicons name="musical-notes-outline" size={48} color="#333" />
           <Text style={styles.hintText}>Search your music library</Text>
+          <Text style={styles.hintSub}>Supports fuzzy search — typos are OK!</Text>
         </View>
       ) : results.length === 0 ? (
         <View style={styles.hint}>
@@ -58,6 +66,7 @@ export default function SearchScreen({ navigation }) {
               track={item}
               isActive={currentTrack?.id === item.id}
               onPress={() => { loadAndPlay(item, results, index); navigation.navigate('Player'); }}
+              onLongPress={() => handleLongPress(item)}
             />
           )}
           contentContainerStyle={{ paddingBottom: 8 }}
@@ -80,4 +89,5 @@ const styles = StyleSheet.create({
   input: { flex: 1, color: '#fff', fontSize: 15, paddingVertical: 12 },
   hint: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12 },
   hintText: { color: '#555', fontSize: 15 },
+  hintSub: { color: '#333', fontSize: 13 },
 });

@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "BeatWave",
+    "name": "SamPlayer",
     "slug": "beatwave-music-player",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -36,7 +36,7 @@
       [
         "expo-media-library",
         {
-          "photosPermission": "Allow BeatWave to access your music files.",
+          "photosPermission": "Allow SamPlayer to access your music files.",
           "savePhotosPermission": false,
           "isAccessMediaLocationEnabled": false
         }

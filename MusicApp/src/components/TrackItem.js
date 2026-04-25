@@ -3,9 +3,9 @@ import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { formatTime } from '../utils/formatTime';
 
-export default function TrackItem({ track, onPress, isActive }) {
+export default function TrackItem({ track, onPress, onLongPress, isActive }) {
   return (
-    <TouchableOpacity style={[styles.container, isActive && styles.active]} onPress={onPress} activeOpacity={0.7}>
+    <TouchableOpacity style={[styles.container, isActive && styles.active]} onPress={onPress} onLongPress={onLongPress} activeOpacity={0.7}>
       <View style={styles.artwork}>
         {track.artwork
           ? <Image source={{ uri: track.artwork }} style={styles.artImg} />
