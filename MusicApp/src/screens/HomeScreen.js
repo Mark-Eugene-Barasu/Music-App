@@ -8,14 +8,16 @@ import TrackItem from '../components/TrackItem';
 import MiniPlayer from '../components/MiniPlayer';
 
 export default function HomeScreen({ navigation }) {
-  const { tracks, loading, permissionStatus } = useMediaLibrary();
+  const { tracks, loading, loadingCount, permissionStatus } = useMediaLibrary();
   const { loadAndPlay, currentTrack } = usePlayer();
 
   if (loading) {
     return (
       <View style={styles.center}>
         <ActivityIndicator size="large" color="#1DB954" />
-        <Text style={styles.loadingText}>Loading your music...</Text>
+        <Text style={styles.loadingText}>
+          {loadingCount > 0 ? `Found ${loadingCount} songs...` : 'Loading your music...'}
+        </Text>
       </View>
     );
   }

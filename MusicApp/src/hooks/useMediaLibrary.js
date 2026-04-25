@@ -4,6 +4,7 @@ import * as MediaLibrary from 'expo-media-library';
 export function useMediaLibrary() {
   const [tracks, setTracks] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadingCount, setLoadingCount] = useState(0);
   const [permissionStatus, setPermissionStatus] = useState(null);
 
   useEffect(() => {
@@ -26,6 +27,7 @@ export function useMediaLibrary() {
         after,
       });
       all = [...all, ...page.assets];
+      setLoadingCount(all.length);
       hasMore = page.hasNextPage;
       after = page.endCursor;
     }
@@ -43,5 +45,5 @@ export function useMediaLibrary() {
     setLoading(false);
   }
 
-  return { tracks, loading, permissionStatus, reload: loadTracks };
+  return { tracks, loading, loadingCount, permissionStatus, reload: loadTracks };
 }
