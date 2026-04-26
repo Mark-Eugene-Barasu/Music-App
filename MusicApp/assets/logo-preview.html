@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Go-Music Logo Export</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #111; font-family: Arial, sans-serif; color: #fff; padding: 40px; }
+    h1 { color: #1DB954; margin-bottom: 8px; font-size: 28px; }
+    p  { color: #888; margin-bottom: 32px; font-size: 14px; }
+    .grid { display: flex; flex-wrap: wrap; gap: 40px; align-items: flex-start; }
+    .card { background: #1a1a1a; border-radius: 16px; padding: 24px; text-align: center; }
+    .card h2 { color: #1DB954; font-size: 14px; margin-bottom: 16px; letter-spacing: 2px; text-transform: uppercase; }
+    .card img { display: block; border-radius: 12px; }
+    .card p  { color: #666; font-size: 12px; margin-top: 12px; margin-bottom: 12px; }
+    button {
+      background: #1DB954; color: #000; border: none; border-radius: 20px;
+      padding: 8px 20px; font-weight: 700; font-size: 13px; cursor: pointer;
+      margin-top: 8px;
+    }
+    button:hover { background: #22e065; }
+    canvas { display: none; }
+  </style>
+</head>
+<body>
+  <h1>Go-Music — Logo Preview & Export</h1>
+  <p>Click any "Export PNG" button to download the asset at the correct size for Expo.</p>
+
+  <div class="grid">
+    <div class="card">
+      <h2>Full Logo (1024×1024)</h2>
+      <img id="logoFull" src="logo.svg" width="300" height="300" />
+      <p>Use for splash screen / marketing</p>
+      <button onclick="exportPNG('logoFull', 'logo-full.png', 1024)">Export PNG 1024×1024</button>
+    </div>
+
+    <div class="card">
+      <h2>App Icon (1024×1024)</h2>
+      <img id="iconImg" src="icon.svg" width="300" height="300" />
+      <p>→ Replace <code>assets/icon.png</code><br/>→ Replace <code>assets/adaptive-icon.png</code></p>
+      <button onclick="exportPNG('iconImg', 'icon.png', 1024)">Export icon.png</button>
+      <br/>
+      <button onclick="exportPNG('iconImg', 'adaptive-icon.png', 1024)">Export adaptive-icon.png</button>
+    </div>
+
+    <div class="card">
+      <h2>Splash Icon (512×512)</h2>
+      <img id="splashImg" src="icon.svg" width="200" height="200" />
+      <p>→ Replace <code>assets/splash-icon.png</code></p>
+      <button onclick="exportPNG('splashImg', 'splash-icon.png', 512)">Export splash-icon.png</button>
+    </div>
+
+    <div class="card">
+      <h2>Favicon (64×64)</h2>
+      <img id="faviconImg" src="icon.svg" width="64" height="64" />
+      <p>→ Replace <code>assets/favicon.png</code></p>
+      <button onclick="exportPNG('faviconImg', 'favicon.png', 64)">Export favicon.png</button>
+    </div>
+  </div>
+
+  <canvas id="exportCanvas"></canvas>
+
+  <script>
+    function exportPNG(imgId, filename, size) {
+      const img = document.getElementById(imgId);
+      const canvas = document.getElementById('exportCanvas');
+      canvas.width = size;
+      canvas.height = size;
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, size, size);
+
+      // Draw SVG onto canvas at target size
+      const svgSrc = img.src;
+      const image = new Image();
+      image.width = size;
+      image.height = size;
+      image.onload = () => {
+        ctx.drawImage(image, 0, 0, size, size);
+        const link = document.createElement('a');
+        link.download = filename;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      };
+      image.src = svgSrc;
+    }
+  </script>
+</body>
+</html>

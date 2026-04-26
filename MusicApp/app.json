@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "SamPlayer",
-    "slug": "beatwave-music-player",
+    "name": "Go-Music",
+    "slug": "go-music",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -23,7 +23,11 @@
         "android.permission.READ_EXTERNAL_STORAGE",
         "android.permission.FOREGROUND_SERVICE",
         "android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK",
-        "android.permission.MODIFY_AUDIO_SETTINGS"
+        "android.permission.MODIFY_AUDIO_SETTINGS",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.READ_MEDIA_VISUAL_USER_SELECTED",
+        "android.permission.READ_MEDIA_IMAGES",
+        "android.permission.READ_MEDIA_VIDEO"
       ]
     },
     "plugins": [
@@ -36,7 +40,7 @@
       [
         "expo-media-library",
         {
-          "photosPermission": "Allow SamPlayer to access your music files.",
+          "photosPermission": "Allow Go-Music to access your music files.",
           "savePhotosPermission": false,
           "isAccessMediaLocationEnabled": false
         }
@@ -44,7 +48,7 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "3a054f66-534e-4a13-b806-67ce2ad04e91"
+        "projectId": "b17c6b64-2113-4f1b-ad16-b29ec19400bd"
       }
     },
     "owner": "eugene_mark_korku_barasu"

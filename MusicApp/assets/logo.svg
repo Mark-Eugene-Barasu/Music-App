@@ -1,0 +1,126 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs>
+    <!-- Background gradient: deep dark green to near-black -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a1a0f;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#000000;stop-opacity:1" />
+    </linearGradient>
+
+    <!-- Green glow gradient for the G shape -->
+    <linearGradient id="gGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1DB954;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0f7a35;stop-opacity:1" />
+    </linearGradient>
+
+    <!-- Glow filter -->
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="18" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Subtle inner shadow for depth -->
+    <filter id="innerGlow" x="-10%" y="-10%" width="120%" height="120%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Clip to circle for adaptive icon -->
+    <clipPath id="circleClip">
+      <circle cx="512" cy="512" r="512"/>
+    </clipPath>
+  </defs>
+
+  <!-- Background circle -->
+  <circle cx="512" cy="512" r="512" fill="url(#bgGrad)"/>
+
+  <!-- Outer subtle ring -->
+  <circle cx="512" cy="512" r="460" fill="none" stroke="#1DB954" stroke-width="2" opacity="0.15"/>
+  <circle cx="512" cy="512" r="420" fill="none" stroke="#1DB954" stroke-width="1" opacity="0.08"/>
+
+  <!-- Sound wave bars (left side, behind G) — equalizer aesthetic -->
+  <!-- Bar 1 -->
+  <rect x="148" y="440" width="28" height="144" rx="14" fill="#1DB954" opacity="0.18"/>
+  <!-- Bar 2 -->
+  <rect x="192" y="390" width="28" height="244" rx="14" fill="#1DB954" opacity="0.22"/>
+  <!-- Bar 3 -->
+  <rect x="236" y="350" width="28" height="324" rx="14" fill="#1DB954" opacity="0.14"/>
+
+  <!-- Sound wave bars (right side) -->
+  <rect x="768" y="440" width="28" height="144" rx="14" fill="#1DB954" opacity="0.18"/>
+  <rect x="812" y="390" width="28" height="244" rx="14" fill="#1DB954" opacity="0.22"/>
+  <rect x="856" y="350" width="28" height="324" rx="14" fill="#1DB954" opacity="0.14"/>
+
+  <!-- ===== MAIN "G" LETTERFORM ===== -->
+  <!-- Built from arcs and a rectangle to form a bold, modern G -->
+  <g filter="url(#glow)">
+    <!-- Outer arc of G (donut ring, clipped to left+top+bottom, open on right) -->
+    <!-- We draw the G as: thick ring arc from ~30deg to ~330deg, then a horizontal bar -->
+
+    <!-- G ring: large circle minus inner circle, masked to show only the G shape -->
+    <!-- Approach: stroke-dasharray arc technique for clean G -->
+
+    <!-- Outer stroke arc — the curved part of G -->
+    <circle
+      cx="512" cy="490"
+      r="230"
+      fill="none"
+      stroke="url(#gGrad)"
+      stroke-width="80"
+      stroke-linecap="round"
+      stroke-dasharray="1085 1447"
+      stroke-dashoffset="-180"
+      transform="rotate(-100 512 490)"
+    />
+
+    <!-- Horizontal crossbar of G -->
+    <rect x="512" y="450" width="230" height="78" rx="39" fill="url(#gGrad)"/>
+
+    <!-- Small vertical stem connecting crossbar down -->
+    <rect x="662" y="450" width="80" height="160" rx="36" fill="url(#gGrad)"/>
+  </g>
+
+  <!-- ===== MUSIC NOTE dot / accent ===== -->
+  <!-- Floating eighth note to the top-right of the G -->
+  <g transform="translate(720, 210)" filter="url(#innerGlow)" opacity="0.9">
+    <!-- Note head -->
+    <ellipse cx="0" cy="52" rx="26" ry="20" fill="#1DB954" transform="rotate(-20 0 52)"/>
+    <!-- Note stem -->
+    <rect x="22" y="-30" width="10" height="84" rx="5" fill="#1DB954"/>
+    <!-- Note flag -->
+    <path d="M32 -30 Q80 -10 60 30" stroke="#1DB954" stroke-width="10" fill="none" stroke-linecap="round"/>
+  </g>
+
+  <!-- ===== Wordmark: "Go-Music" ===== -->
+  <text
+    x="512"
+    y="790"
+    font-family="'Arial Black', 'Helvetica Neue', Arial, sans-serif"
+    font-size="96"
+    font-weight="900"
+    fill="#ffffff"
+    text-anchor="middle"
+    letter-spacing="6"
+  >Go-Music</text>
+
+  <!-- Green underline accent under wordmark -->
+  <rect x="312" y="808" width="400" height="7" rx="3.5" fill="#1DB954" opacity="0.8"/>
+
+  <!-- Tagline -->
+  <text
+    x="512"
+    y="870"
+    font-family="'Arial', 'Helvetica Neue', Arial, sans-serif"
+    font-size="36"
+    font-weight="400"
+    fill="#1DB954"
+    text-anchor="middle"
+    letter-spacing="8"
+    opacity="0.75"
+  >YOUR MUSIC. YOUR WAY.</text>
+</svg>

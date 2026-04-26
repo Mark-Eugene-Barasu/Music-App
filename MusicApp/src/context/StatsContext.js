@@ -3,7 +3,7 @@ import { load, save } from '../utils/storage';
 
 const StatsContext = createContext(null);
 
-const STATS_KEY = 'samplayer_stats';
+const STATS_KEY = 'gomusic_stats';
 
 export function StatsProvider({ children }) {
   const [stats, setStats] = useState({});

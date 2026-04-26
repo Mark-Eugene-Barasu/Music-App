@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { load, save } from '../utils/storage';
 
 const PlaylistContext = createContext(null);
-const KEY = 'samplayer_playlists';
+const KEY = 'gomusic_playlists';
 
 export function PlaylistProvider({ children }) {
   const [playlists, setPlaylists] = useState([]);

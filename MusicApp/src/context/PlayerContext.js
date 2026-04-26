@@ -16,6 +16,7 @@ export function PlayerProvider({ children }) {
   const [repeatMode, setRepeatMode] = useState('none');
   const [normalizeAudio, setNormalizeAudio] = useState(true);
   const [crossfadeEnabled, setCrossfadeEnabled] = useState(true);
+  const [qualityMode, setQualityMode] = useState('normal'); // 'saver' | 'normal' | 'hires'
   const [sleepTimer, setSleepTimer] = useState(null); // minutes remaining
   const sleepTimerRef = useRef(null);
   const soundRef = useRef(null);
@@ -215,13 +216,16 @@ export function PlayerProvider({ children }) {
   }
   function toggleNormalize() { setNormalizeAudio(v => !v); }
   function toggleCrossfade() { setCrossfadeEnabled(v => !v); }
+  function cycleQualityMode() {
+    setQualityMode(m => m === 'saver' ? 'normal' : m === 'normal' ? 'hires' : 'saver');
+  }
 
   return (
     <PlayerContext.Provider value={{
       currentTrack, queue, currentIndex, isPlaying, position, duration,
-      isShuffled, repeatMode, normalizeAudio, crossfadeEnabled, sleepTimer,
+      isShuffled, repeatMode, normalizeAudio, crossfadeEnabled, qualityMode, sleepTimer,
       loadAndPlay, togglePlay, seekTo, skipNext, skipPrev,
-      toggleShuffle, toggleRepeat, toggleNormalize, toggleCrossfade,
+      toggleShuffle, toggleRepeat, toggleNormalize, toggleCrossfade, cycleQualityMode,
       addToQueue, playNext, removeFromQueue,
       startSleepTimer, cancelSleepTimer,
     }}>

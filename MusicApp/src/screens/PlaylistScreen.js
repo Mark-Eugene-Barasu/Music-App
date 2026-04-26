@@ -5,6 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { usePlaylists } from '../context/PlaylistContext';
 import { usePlayer } from '../context/PlayerContext';
 import { useMediaLibrary } from '../hooks/useMediaLibrary';
+import { useTheme } from '../context/ThemeContext';
 import TrackItem from '../components/TrackItem';
 
 export default function PlaylistScreen({ route, navigation }) {
@@ -12,6 +13,7 @@ export default function PlaylistScreen({ route, navigation }) {
   const { playlists, renamePlaylist, deletePlaylist, removeTrackFromPlaylist } = usePlaylists();
   const { loadAndPlay, currentTrack } = usePlayer();
   const { tracks } = useMediaLibrary();
+  const { palette } = useTheme();
   const [editing, setEditing] = useState(false);
   const [name, setName] = useState('');
 
@@ -36,17 +38,17 @@ export default function PlaylistScreen({ route, navigation }) {
   }
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
-      <View style={styles.header}>
+    <SafeAreaView style={[styles.container, { backgroundColor: palette.bg }]} edges={['top']}>
+      <View style={[styles.header, { borderBottomColor: palette.border }]}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Ionicons name="chevron-back" size={26} color="#fff" />
+          <Ionicons name="chevron-back" size={26} color={palette.text} />
         </TouchableOpacity>
         {editing
-          ? <TextInput style={styles.input} value={name} onChangeText={setName} autoFocus />
-          : <Text style={styles.title} numberOfLines={1}>{playlist.name}</Text>}
+          ? <TextInput style={[styles.input, { color: palette.text, borderBottomColor: palette.accent }]} value={name} onChangeText={setName} autoFocus />
+          : <Text style={[styles.title, { color: palette.text }]} numberOfLines={1}>{playlist.name}</Text>}
         <View style={styles.headerActions}>
           <TouchableOpacity onPress={handleRename} style={styles.iconBtn}>
-            <Ionicons name={editing ? 'checkmark' : 'pencil'} size={20} color="#1DB954" />
+            <Ionicons name={editing ? 'checkmark' : 'pencil'} size={20} color={palette.accent} />
           </TouchableOpacity>
           <TouchableOpacity onPress={handleDelete} style={styles.iconBtn}>
             <Ionicons name="trash" size={20} color="#e74c3c" />
@@ -55,7 +57,7 @@ export default function PlaylistScreen({ route, navigation }) {
       </View>
 
       {playlistTracks.length > 0 && (
-        <TouchableOpacity style={styles.playAll} onPress={() => loadAndPlay(playlistTracks[0], playlistTracks, 0)}>
+        <TouchableOpacity style={[styles.playAll, { backgroundColor: palette.accent }]} onPress={() => loadAndPlay(playlistTracks[0], playlistTracks, 0)}>
           <Ionicons name="play-circle" size={20} color="#000" />
           <Text style={styles.playAllText}>Play All</Text>
         </TouchableOpacity>
@@ -75,7 +77,7 @@ export default function PlaylistScreen({ route, navigation }) {
             ])}
           />
         )}
-        ListEmptyComponent={<Text style={styles.empty}>No tracks yet. Long-press a song to add it.</Text>}
+        ListEmptyComponent={<Text style={[styles.empty, { color: palette.textMuted }]}>No tracks yet. Long-press a song to add it.</Text>}
         contentContainerStyle={{ paddingBottom: 40 }}
       />
     </SafeAreaView>
@@ -83,13 +85,13 @@ export default function PlaylistScreen({ route, navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#0f0f0f' },
-  header: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 14, gap: 8 },
-  title: { color: '#fff', fontSize: 18, fontWeight: '700', flex: 1 },
-  input: { flex: 1, color: '#fff', fontSize: 18, fontWeight: '700', borderBottomWidth: 1, borderBottomColor: '#1DB954', paddingVertical: 2 },
+  container: { flex: 1 },
+  header: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 14, gap: 8, borderBottomWidth: 1 },
+  title: { fontSize: 18, fontWeight: '700', flex: 1 },
+  input: { flex: 1, fontSize: 18, fontWeight: '700', borderBottomWidth: 1, paddingVertical: 2 },
   headerActions: { flexDirection: 'row', gap: 8 },
   iconBtn: { padding: 4 },
-  playAll: { flexDirection: 'row', alignItems: 'center', gap: 8, backgroundColor: '#1DB954', marginHorizontal: 16, marginBottom: 8, paddingVertical: 10, paddingHorizontal: 20, borderRadius: 24, alignSelf: 'flex-start' },
+  playAll: { flexDirection: 'row', alignItems: 'center', gap: 8, marginHorizontal: 16, marginVertical: 8, paddingVertical: 10, paddingHorizontal: 20, borderRadius: 24, alignSelf: 'flex-start' },
   playAllText: { color: '#000', fontWeight: '700', fontSize: 14 },
-  empty: { color: '#555', textAlign: 'center', marginTop: 60, fontSize: 14, paddingHorizontal: 32 },
+  empty: { textAlign: 'center', marginTop: 60, fontSize: 14, paddingHorizontal: 32 },
 });
